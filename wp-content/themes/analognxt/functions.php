@@ -150,6 +150,57 @@ function analognxt_scripts() {
 add_action( 'wp_enqueue_scripts', 'analognxt_scripts' );
 
 /**
+ * Enqueue homepage-specific styles and scripts from analogNXTTheme folder.
+ */
+function analognxt_homepage_assets() {
+	if ( ! is_front_page() ) {
+		return;
+	}
+
+	$theme_dir = get_template_directory_uri() . '/analogNXTTheme';
+
+	// Enqueue main Webflow stylesheet
+	wp_enqueue_style( 'analognxt-webflow', $theme_dir . '/css/zeitmedia.webflow.shared.ac95f00aa.min.css', array(), '1.0.0' );
+
+	// Enqueue Swiper CSS
+	wp_enqueue_style( 'analognxt-swiper', $theme_dir . '/css/swiper-bundle.min.css', array(), '8.4.7' );
+
+	// Enqueue Splitting CSS
+	wp_enqueue_style( 'analognxt-splitting', $theme_dir . '/css/splitting.css', array(), '1.0.0' );
+	wp_enqueue_style( 'analognxt-splitting-cells', $theme_dir . '/css/splitting-cells.css', array(), '1.0.0' );
+
+	// Enqueue JavaScript files
+	wp_enqueue_script( 'jquery' );
+
+	// Enqueue GSAP and plugins
+	wp_enqueue_script( 'analognxt-gsap', $theme_dir . '/js/gsap.min.js', array(), '3.0.0', true );
+	wp_enqueue_script( 'analognxt-scrolltrigger', $theme_dir . '/js/ScrollTrigger.min.js', array( 'analognxt-gsap' ), '3.0.0', true );
+	wp_enqueue_script( 'analognxt-custom-ease', $theme_dir . '/js/CustomEase.min.js', array( 'analognxt-gsap' ), '3.0.0', true );
+	wp_enqueue_script( 'analognxt-draggable', $theme_dir . '/js/Draggable.min.js', array( 'analognxt-gsap' ), '3.0.0', true );
+	wp_enqueue_script( 'analognxt-flip', $theme_dir . '/js/Flip.min.js', array( 'analognxt-gsap' ), '3.0.0', true );
+	wp_enqueue_script( 'analognxt-inertia', $theme_dir . '/js/InertiaPlugin.min.js', array( 'analognxt-gsap' ), '3.0.0', true );
+
+	// Enqueue other libraries
+	wp_enqueue_script( 'analognxt-lenis', $theme_dir . '/js/lenis.min.js', array(), '1.0.0', true );
+	wp_enqueue_script( 'analognxt-splitting', $theme_dir . '/js/splitting.min.js', array(), '1.0.0', true );
+	wp_enqueue_script( 'analognxt-swiper', $theme_dir . '/js/swiper-bundle.min.js', array(), '8.4.7', true );
+	wp_enqueue_script( 'analognxt-lottie', $theme_dir . '/js/lottie.min.js', array(), '5.0.0', true );
+	wp_enqueue_script( 'analognxt-barba', $theme_dir . '/js/barba.umd.min.js', array(), '2.0.0', true );
+
+	// Enqueue Webflow script
+	wp_enqueue_script( 'analognxt-webflow', $theme_dir . '/js/webflow.b049d1f4.43e069df8c3fa506.js', array( 'jquery' ), '1.0.0', true );
+
+	// Enqueue custom scripts
+	wp_enqueue_script( 'analognxt-attributes', $theme_dir . '/js/attributes.js', array(), '1.0.0', true );
+	wp_enqueue_script( 'analognxt-geo', $theme_dir . '/js/geo.js', array(), '1.0.0', true );
+
+	// Note: main.js is too large to be loaded via enqueue due to ACL restrictions
+	// It should be split into smaller modules or loaded differently
+	wp_enqueue_script( 'analognxt-main', $theme_dir . '/js/main.js', array( 'analognxt-gsap', 'analognxt-lenis', 'analognxt-barba' ), '1.0.0', true );
+}
+add_action( 'wp_enqueue_scripts', 'analognxt_homepage_assets' );
+
+/**
  * Implement the Custom Header feature.
  */
 require get_template_directory() . '/inc/custom-header.php';
@@ -176,3 +227,7 @@ if ( defined( 'JETPACK__VERSION' ) ) {
 	require get_template_directory() . '/inc/jetpack.php';
 }
 
+/**
+ * Homepage helper functions.
+ */
+require get_template_directory() . '/inc/homepage-helpers.php';
